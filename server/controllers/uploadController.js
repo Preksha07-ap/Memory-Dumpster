@@ -1,25 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 
-// Ensure uploads directory exists
-const uploadDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
+// Cloudinary Configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // Storage Configuration
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadDir);
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'project_uploads', // Folder name in Cloudinary
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
     },
-    filename: function (req, file, cb) {
-        // Create unique filename: fieldname-timestamp.ext
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
 });
 
 // File Filter (Images Only)
@@ -42,8 +40,8 @@ router.post('/', upload.single('image'), (req, res) => {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
-        const imageUrl = `/uploads/${req.file.filename}`;
-        res.json({ url: imageUrl });
+        // Cloudinary returns the URL in `path` or `secure_url`
+        res.json({ url: req.file.path });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -56,7 +54,7 @@ router.post('/multiple', upload.array('images', 10), (req, res) => {
             return res.status(400).json({ message: 'No files uploaded' });
         }
 
-        const imageUrls = req.files.map(file => `/uploads/${file.filename}`);
+        const imageUrls = req.files.map(file => file.path);
         res.json({ urls: imageUrls });
     } catch (err) {
         res.status(500).json({ message: err.message });

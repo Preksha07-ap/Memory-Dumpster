@@ -28,10 +28,10 @@ const Projects = () => {
     const uploadImage = async (file) => {
         const formData = new FormData();
         formData.append('image', file);
-        const res = await fetch('http://localhost:5000/api/upload', { method: 'POST', body: formData });
+        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const res = await fetch(`${baseUrl}/api/upload`, { method: 'POST', body: formData });
         const data = await res.json();
-        return data.url ? `http://localhost:5000${data.url}` : null;
-        return data.url ? `http://localhost:5000${data.url}` : null;
+        return data.url ? `${baseUrl}${data.url}` : null;
     };
 
     const handleLike = async (projectId) => {
@@ -100,7 +100,7 @@ const Projects = () => {
             ...newProject,
             stack: stackArray.length ? stackArray : ['New'],
             img: imgUrl,
-            github: newProject.github || '#'
+            github: newProject.github || ''
         };
 
         const result = await apiFetch('/projects', {
@@ -139,7 +139,11 @@ const Projects = () => {
                                 ))}
                             </div>
                             <div className="project-actions">
-                                <a href={proj.github} target="_blank" rel="noopener noreferrer" className="action-btn github">View Code</a>
+                                {proj.github && proj.github !== '#' ? (
+                                    <a href={proj.github.startsWith('http') ? proj.github : `https://github.com/${proj.github}`} target="_blank" rel="noopener noreferrer" className="action-btn github">View Code</a>
+                                ) : (
+                                    <button className="action-btn github" onClick={() => alert("No GitHub link provided for this project")} style={{ opacity: 0.6 }}>View Code</button>
+                                )}
                                 <button className="like-btn" onClick={() => handleLike(proj._id)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                     <Heart size={20} fill={proj.likes?.includes(user?._id || user?.id) ? "#ff4757" : "none"} color="#ff4757" />
                                     <span>{proj.likes?.length || 0}</span>

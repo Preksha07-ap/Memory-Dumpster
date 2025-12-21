@@ -46,13 +46,14 @@ const ProfileSetup = () => {
         data.append('image', file);
 
         try {
-            const res = await fetch('http://localhost:5000/api/upload', {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const res = await fetch(`${baseUrl}/api/upload`, {
                 method: 'POST',
                 body: data
             });
             const result = await res.json();
             if (result.url) {
-                setFormData({ ...formData, img: `http://localhost:5000${result.url}` });
+                setFormData({ ...formData, img: `${baseUrl}${result.url}` });
             }
         } catch (error) {
             console.error("Upload failed", error);
@@ -64,7 +65,8 @@ const ProfileSetup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:5000/api/auth/register', {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const res = await fetch(`${baseUrl}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

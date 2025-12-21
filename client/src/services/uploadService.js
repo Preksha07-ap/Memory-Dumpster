@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api/upload';
+const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/upload` : 'http://localhost:5000/api/upload';
 
 export const uploadImage = async (file) => {
     const formData = new FormData();
@@ -9,7 +9,8 @@ export const uploadImage = async (file) => {
         body: formData,
     });
     const data = await response.json();
-    return data.url ? `http://localhost:5000${data.url}` : null;
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    return data.url ? `${baseUrl}${data.url}` : null;
 };
 
 export const uploadMultipleImages = async (files) => {

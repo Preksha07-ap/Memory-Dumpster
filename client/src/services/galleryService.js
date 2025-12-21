@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api/gallery';
+const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/gallery` : 'http://localhost:5000/api/gallery';
 
 export const getAlbums = async () => {
     const response = await fetch(API_URL);

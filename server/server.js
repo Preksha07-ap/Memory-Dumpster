@@ -19,9 +19,18 @@ app.use((req, res, next) => {
     next();
 });
 
+// MongoDB Connection
+if (!process.env.MONGO_URI) {
+    console.error('❌ FATAL ERROR: MONGO_URI is not defined in .env');
+    process.exit(1);
+}
+
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ MongoDB Connected'))
-    .catch(err => console.error('❌ MongoDB Connection Error:', err));
+    .catch(err => {
+        console.error('❌ MongoDB Connection Error:', err);
+        process.exit(1); // Exit if DB fails
+    });
 
 const eventRoutes = require('./controllers/eventController');
 const projectRoutes = require('./controllers/projectController');
