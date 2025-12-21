@@ -33,7 +33,7 @@ const Events = () => {
     const uploadImage = async (file) => {
         const formData = new FormData();
         formData.append('image', file);
-        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const baseUrl = import.meta.env.VITE_API_URL || '';
         const res = await fetch(`${baseUrl}/api/upload`, { method: 'POST', body: formData });
         const data = await res.json();
         return data.url ? `${baseUrl}${data.url}` : null;

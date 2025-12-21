@@ -46,7 +46,7 @@ const ProfileSetup = () => {
         data.append('image', file);
 
         try {
-            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const baseUrl = import.meta.env.VITE_API_URL || '';
             const res = await fetch(`${baseUrl}/api/upload`, {
                 method: 'POST',
                 body: data
@@ -65,7 +65,7 @@ const ProfileSetup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const baseUrl = import.meta.env.VITE_API_URL || '';
             const res = await fetch(`${baseUrl}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

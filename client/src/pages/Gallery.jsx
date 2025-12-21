@@ -125,7 +125,7 @@ const Gallery = () => {
 
                 if (uploadData.urls) {
                     const uploadedPhotos = uploadData.urls.map(url => ({
-                        src: `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${url}`,
+                        src: `${import.meta.env.VITE_API_URL || ''}${url}`,
                         caption: newPhoto.desc // Use same caption for batch
                     }));
                     photosToAdd = [...photosToAdd, ...uploadedPhotos];
