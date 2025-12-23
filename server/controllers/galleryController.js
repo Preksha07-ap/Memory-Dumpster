@@ -85,4 +85,33 @@ router.post('/:id/photos/:photoId/like', async (req, res) => {
     }
 });
 
+// Delete Album
+router.delete('/:id', async (req, res) => {
+    try {
+        const album = await Album.findById(req.params.id);
+        if (!album) return res.status(404).json({ message: 'Album not found' });
+
+        await Album.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Album deleted' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Delete Photo from Album
+router.delete('/:id/photos/:photoId', async (req, res) => {
+    try {
+        const album = await Album.findById(req.params.id);
+        if (!album) return res.status(404).json({ message: 'Album not found' });
+
+        // Filter out the photo
+        album.photos = album.photos.filter(p => p._id.toString() !== req.params.photoId);
+        await album.save();
+
+        res.json({ message: 'Photo deleted', album });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = router;

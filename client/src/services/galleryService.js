@@ -27,6 +27,7 @@ export const addPhotos = async (albumId, photos) => {
     return response.json();
 };
 
+
 export const likePhoto = async (albumId, photoId, userId) => {
     const response = await fetch(`${API_URL}/${albumId}/photos/${photoId}/like`, {
         method: 'POST',
@@ -34,6 +35,20 @@ export const likePhoto = async (albumId, photoId, userId) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ userId }),
+    });
+    return response.json();
+};
+
+export const deleteAlbum = async (id) => {
+    const response = await fetch(`${API_URL}/${id}`, {
+        method: 'DELETE',
+    });
+    return response.json();
+};
+
+export const deletePhoto = async (albumId, photoId) => {
+    const response = await fetch(`${API_URL}/${albumId}/photos/${photoId}`, {
+        method: 'DELETE',
     });
     return response.json();
 };

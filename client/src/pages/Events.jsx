@@ -39,6 +39,20 @@ const Events = () => {
         return data.url ? `${baseUrl}${data.url}` : null;
     };
 
+
+    const handleDelete = async (e, id) => {
+        e.stopPropagation(); // Prevent card click
+        if (!window.confirm("Are you sure you want to delete this event?")) return;
+
+        try {
+            await apiFetch(`/events/${id}`, { method: 'DELETE' });
+            setEvents(events.filter(ev => ev._id !== id));
+        } catch (error) {
+            console.error("Delete failed", error);
+            alert("Failed to delete event");
+        }
+    };
+
     const handleAddEvent = async () => {
         if (!newEvent.title || !newEvent.date || !newEvent.desc) {
             alert("Please fill in required fields (Title, Date, Desc)!");
@@ -151,6 +165,11 @@ const Events = () => {
                                             <span className="event-date-badge">{new Date(event.date).toDateString()}</span>
                                             <h3 className="event-title">{event.title}</h3>
                                             <p className="event-desc">{event.desc}</p>
+                                            {user && (
+                                                <button onClick={(e) => handleDelete(e, event._id)} style={{ marginTop: '10px', background: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', float: 'right' }}>
+                                                    Delete 🗑️
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 ))}
@@ -170,6 +189,11 @@ const Events = () => {
                                     <span className="event-date-badge">{new Date(event.date).toDateString()}</span>
                                     <h3 className="event-title">{event.title}</h3>
                                     <p className="event-desc">{event.desc}</p>
+                                    {user && (
+                                        <button onClick={(e) => handleDelete(e, event._id)} style={{ marginTop: '10px', background: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', float: 'right' }}>
+                                            Delete 🗑️
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         )) : <p>No upcoming events.</p>}
@@ -186,6 +210,11 @@ const Events = () => {
                                     <span className="event-date-badge">{new Date(event.date).toDateString()}</span>
                                     <h3 className="event-title">{event.title}</h3>
                                     <p className="event-desc">{event.desc}</p>
+                                    {user && (
+                                        <button onClick={(e) => handleDelete(e, event._id)} style={{ marginTop: '10px', background: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', float: 'right' }}>
+                                            Delete 🗑️
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         )) : <p>No past events recorded.</p>}

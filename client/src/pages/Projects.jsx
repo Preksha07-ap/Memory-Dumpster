@@ -75,6 +75,19 @@ const Projects = () => {
         }
     };
 
+
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this project?")) return;
+
+        try {
+            await apiFetch(`/projects/${id}`, { method: 'DELETE' });
+            setProjects(projects.filter(p => p._id !== id));
+        } catch (error) {
+            console.error("Delete failed", error);
+            alert("Failed to delete project");
+        }
+    };
+
     const handleAddProject = async () => {
         if (!newProject.title) {
             alert("Title is required!");
@@ -148,6 +161,11 @@ const Projects = () => {
                                     <Heart size={20} fill={proj.likes?.includes(user?._id || user?.id) ? "#ff4757" : "none"} color="#ff4757" />
                                     <span>{proj.likes?.length || 0}</span>
                                 </button>
+                                {user && (
+                                    <button className="delete-btn" onClick={() => handleDelete(proj._id)} style={{ background: 'red', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: '5px 10px', color: 'white', marginLeft: 'auto' }}>
+                                        🗑️
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>

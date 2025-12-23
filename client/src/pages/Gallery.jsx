@@ -1,7 +1,54 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Heart } from 'lucide-react';
-import { getAlbums, createAlbum, addPhotos, likePhoto } from '../services/galleryService';
+import { Heart, Trash2 } from 'lucide-react';
+import { getAlbums, createAlbum, addPhotos, likePhoto, deleteAlbum, deletePhoto } from '../services/galleryService';
+
+// ... (existing code)
+
+const handleDeleteAlbum = async (e, id) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this album?")) return;
+
+    try {
+        await deleteAlbum(id);
+        setAlbums(albums.filter(a => (a._id || a.id) !== id));
+        if (currentAlbumId === id) {
+            setCurrentAlbumId(null);
+            setView('albums');
+        }
+    } catch (error) {
+        console.error("Delete album failed", error);
+        alert("Failed to delete album");
+    }
+};
+
+const handleDeletePhoto = async (e, photo) => {
+    e.stopPropagation(); // Lightbox handling
+    if (!window.confirm("Delete this photo?")) return;
+
+    const albumId = currentAlbumId;
+    const photoId = photo._id || photo.id;
+
+    try {
+        await deletePhoto(albumId, photoId);
+
+        // Update state
+        const updatedAlbums = albums.map(alb => {
+            if (alb._id === albumId || alb.id === albumId) {
+                return {
+                    ...alb,
+                    photos: alb.photos.filter(p => (p._id || p.id) !== photoId)
+                };
+            }
+            return alb;
+        });
+        setAlbums(updatedAlbums);
+        setSelectedPhoto(null); // Close lightbox if open
+    } catch (error) {
+        console.error("Delete photo failed", error);
+        alert("Failed to delete photo");
+    }
+};
 import { uploadImage, uploadMultipleImages } from '../services/uploadService';
 
 const Gallery = () => {
@@ -254,6 +301,11 @@ const Gallery = () => {
                                     <h3>{album.title}</h3>
                                     <span>{album.photos?.length || 0} Photos</span>
                                     <span style={{ display: 'block', fontSize: '0.8rem', opacity: 0.7, marginTop: '5px' }}>{album.date}</span>
+                                    {user && (
+                                        <button onClick={(e) => handleDeleteAlbum(e, album._id || album.id)} style={{ marginTop: '5px', background: 'none', border: 'none', cursor: 'pointer', float: 'right', color: 'red' }}>
+                                            <Trash2 size={18} />
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         ))
@@ -262,7 +314,7 @@ const Gallery = () => {
                     )
                 ) : (
                     currentAlbum && currentAlbum.photos.map((photo, idx) => (
-                        <div key={idx} className="gallery-item" onClick={() => setSelectedPhoto(photo)} style={{ cursor: 'pointer' }}>
+                        <div key={idx} className="gallery-item" onClick={() => setSelectedPhoto(photo)} style={{ cursor: 'pointer', position: 'relative' }}>
                             <img src={photo.src} alt={photo.desc} onError={(e) => { e.target.src = 'https://placehold.co/400x200?text=No+Image'; }} />
                             <div className="desc">
                                 {photo.desc}
@@ -276,6 +328,27 @@ const Gallery = () => {
                                     <span style={{ fontSize: '0.8rem', color: '#666' }}>{photo.likes?.length || 0}</span>
                                 </div>
                             </div>
+                            {user && (
+                                <button
+                                    onClick={(e) => handleDeletePhoto(e, photo)}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '10px',
+                                        right: '10px',
+                                        background: 'rgba(255, 0, 0, 0.7)',
+                                        border: 'none',
+                                        borderRadius: '50%',
+                                        width: '30px',
+                                        height: '30px',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                >
+                                    <Trash2 size={16} color="white" />
+                                </button>
+                            )}
                         </div>
                     ))
                 )}
@@ -346,6 +419,15 @@ const Gallery = () => {
                         onError={(e) => { e.target.src = 'https://placehold.co/800x600?text=Image+Load+Error'; }}
                     />
                     {selectedPhoto.desc && <div className="lightbox-caption">{selectedPhoto.desc}</div>}
+                    {user && (
+                        <button
+                            className="lightbox-delete"
+                            style={{ position: 'absolute', bottom: '20px', right: '20px', background: 'red', color: 'white', border: 'none', padding: '10px 15px', borderRadius: '5px', cursor: 'pointer', zIndex: 1001 }}
+                            onClick={(e) => handleDeletePhoto(e, selectedPhoto)}
+                        >
+                            Delete Photo 🗑️
+                        </button>
+                    )}
                 </div>
             )}
 
