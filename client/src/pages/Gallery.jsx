@@ -18,7 +18,7 @@ const handleDeleteAlbum = async (e, id) => {
         }
     } catch (error) {
         console.error("Delete album failed", error);
-        alert("Failed to delete album");
+        alert(error.message || "Failed to delete album");
     }
 };
 
@@ -46,7 +46,7 @@ const handleDeletePhoto = async (e, photo) => {
         setSelectedPhoto(null); // Close lightbox if open
     } catch (error) {
         console.error("Delete photo failed", error);
-        alert("Failed to delete photo");
+        alert(error.message || "Failed to delete photo");
     }
 };
 import { uploadImage, uploadMultipleImages } from '../services/uploadService';

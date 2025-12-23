@@ -43,6 +43,10 @@ export const deleteAlbum = async (id) => {
     const response = await fetch(`${API_URL}/${id}`, {
         method: 'DELETE',
     });
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server Error: ${response.status} - ${errorText.substring(0, 100)}`);
+    }
     return response.json();
 };
 
@@ -50,5 +54,9 @@ export const deletePhoto = async (albumId, photoId) => {
     const response = await fetch(`${API_URL}/${albumId}/photos/${photoId}`, {
         method: 'DELETE',
     });
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server Error: ${response.status} - ${errorText.substring(0, 100)}`);
+    }
     return response.json();
 };

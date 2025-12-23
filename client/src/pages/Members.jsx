@@ -80,6 +80,29 @@ const Members = () => {
                             {member.linkedin !== '#' && <a href={member.linkedin} target="_blank" rel="noreferrer" className="social-btn linkedin">LinkedIn</a>}
                             {member.github !== '#' && <a href={member.github} target="_blank" rel="noreferrer" className="social-btn github">GitHub</a>}
                         </div>
+                        {user && (
+                            <button
+                                onClick={async () => {
+                                    if (!window.confirm(`Are you sure you want to remove ${member.name}?`)) return;
+                                    try {
+                                        const baseUrl = import.meta.env.VITE_API_URL || '';
+                                        const res = await fetch(`${baseUrl}/api/members/${member._id}`, { method: 'DELETE' });
+                                        if (res.ok) {
+                                            setMembers(members.filter(m => m._id !== member._id));
+                                        } else {
+                                            const txt = await res.text();
+                                            alert("Failed to delete member: " + txt);
+                                        }
+                                    } catch (err) {
+                                        console.error(err);
+                                        alert("Error deleting member");
+                                    }
+                                }}
+                                style={{ marginTop: '10px', background: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', display: 'block', width: '100%' }}
+                            >
+                                Remove Member
+                            </button>
+                        )}
                     </div>
                 ))}
             </div>
