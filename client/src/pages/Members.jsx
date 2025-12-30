@@ -60,7 +60,7 @@ const Members = () => {
                 )}
 
                 {members.filter(member => {
-                    const isIdMatch = user._id && member._id === user._id;
+                    const isIdMatch = user?._id && member._id === user._id;
                     const isEmailMatch = member.email?.toLowerCase() === user?.email?.toLowerCase();
                     const isNameMatch = member.name?.toLowerCase() === user?.name?.toLowerCase();
                     // Filter out if ANY match (ID, Email, or Name) to prevent duplicates
