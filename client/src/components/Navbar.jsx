@@ -10,7 +10,7 @@ const Navbar = () => {
     const closeMenu = () => setIsOpen(false);
 
     return (
-        <>
+        <nav>
             <div className="nav-cards">
                 <Link to="/" className="nav-card">Home</Link>
                 <Link to="/gallery" className="nav-card">Gallery</Link>
@@ -64,7 +64,7 @@ const Navbar = () => {
                     )}
                 </div>
             )}
-        </>
+        </nav>
     );
 };
 

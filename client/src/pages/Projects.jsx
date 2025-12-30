@@ -132,6 +132,14 @@ const Projects = () => {
         setUploading(false);
     };
 
+    const getGithubLink = (link) => {
+        if (!link) return '#';
+        let result = link.trim();
+        // Normalize by removing existing protocol/domain prefixes to isolate the path
+        result = result.replace(/^(https?:\/\/)?(www\.)?github\.com\s*\/?\s*/, '');
+        return `https://github.com/${result}`;
+    };
+
     return (
         <main style={{ paddingTop: '20px' }}>
             <div className="glass-header-box">
@@ -153,7 +161,7 @@ const Projects = () => {
                             </div>
                             <div className="project-actions">
                                 {proj.github && proj.github !== '#' ? (
-                                    <a href={proj.github.startsWith('http') ? proj.github : `https://github.com/${proj.github}`} target="_blank" rel="noopener noreferrer" className="action-btn github">View Code</a>
+                                    <a href={getGithubLink(proj.github)} target="_blank" rel="noopener noreferrer" className="action-btn github">View Code</a>
                                 ) : (
                                     <button className="action-btn github" onClick={() => alert("No GitHub link provided for this project")} style={{ opacity: 0.6 }}>View Code</button>
                                 )}

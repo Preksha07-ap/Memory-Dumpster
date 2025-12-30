@@ -711,3 +711,130 @@ main {
   filter: brightness(1.1);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+/* ========== Mobile Refactor (Flipkart/E-commerce Style) ========== */
+@media (max-width: 768px) {
+
+  /* 1. Fix Background Image */
+  body {
+    background-size: cover;
+    /* Ensure it covers full height */
+    background-position: center top;
+    /* Focus on faces/top part */
+    background-attachment: scroll;
+    /* Fixed is buggy on mobile */
+  }
+
+  /* 2. Grid System: 2 Columns on Mobile */
+  .gallery,
+  .events-grid,
+  .members-grid,
+  #projects-grid {
+    display: grid;
+    /* Force 2 columns: 1fr 1fr */
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    /* Tighter gap */
+    padding: 10px !important;
+    /* Less container padding */
+  }
+
+  /* 3. Card Styling for Mobile (Compact) */
+  .album-card,
+  .member-card,
+  .event-card,
+  .project-card,
+  .gallery-item {
+    background: rgba(255, 255, 255, 0.95);
+    /* More opaque for readability */
+    border-radius: 12px;
+    /* Slightly smaller radius */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+  }
+
+  .album-cover,
+  .event-img,
+  .project-img,
+  .gallery-item img {
+    height: 140px;
+    /* Reduced height for proportion */
+  }
+
+  /* Content Padding in Cards */
+  .album-info,
+  .event-content,
+  .project-content {
+    padding: 10px 12px !important;
+  }
+
+  /* Typography Scaling */
+  .album-info h3,
+  .event-content h3,
+  .project-content h3 {
+    font-size: 1rem;
+    /* Smaller titles */
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Prevent wrapping blowout */
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+    margin: 20px 0 15px;
+  }
+
+  /* Glass Header Adjustments */
+  .glass-header-box {
+    width: 95%;
+    padding: 15px 10px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    /* Increased opacity for readability */
+  }
+
+  .category-switch-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .category-switch-container .cta-btn {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    width: 48%;
+    /* Split buttons evenly */
+    text-align: center;
+    margin: 0 2px !important;
+  }
+
+  /* Hide irrelevant elements if needed, or adjust */
+  .add-btn {
+    width: 100%;
+    /* Full width add buttons */
+    margin-top: 5px;
+  }
+
+  /* Members Specific Fixes */
+  .member-card {
+    padding: 15px;
+  }
+
+  .member-avatar {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+  }
+
+  .member-name {
+    font-size: 1.1rem;
+  }
+
+  .member-role {
+    font-size: 0.85rem;
+  }
+}

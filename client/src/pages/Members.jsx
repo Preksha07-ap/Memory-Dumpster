@@ -53,8 +53,8 @@ const Members = () => {
                         <br /><br />
 
                         <div className="social-links">
-                            {user.linkedin && <a href={user.linkedin} target="_blank" rel="noreferrer" className="social-btn linkedin">LinkedIn</a>}
-                            {user.github && <a href={user.github} target="_blank" rel="noreferrer" className="social-btn github">GitHub</a>}
+                            {user.linkedin && user.linkedin !== '#' && <a href={user.linkedin} target="_blank" rel="noreferrer" className="social-btn linkedin">LinkedIn</a>}
+                            {user.github && user.github !== '#' && <a href={user.github} target="_blank" rel="noreferrer" className="social-btn github">GitHub</a>}
                         </div>
                     </div>
                 )}
@@ -77,8 +77,8 @@ const Members = () => {
                         <div className="member-qual">{member.qualification}</div>
 
                         <div className="social-links" style={{ marginTop: '15px' }}>
-                            {member.linkedin !== '#' && <a href={member.linkedin} target="_blank" rel="noreferrer" className="social-btn linkedin">LinkedIn</a>}
-                            {member.github !== '#' && <a href={member.github} target="_blank" rel="noreferrer" className="social-btn github">GitHub</a>}
+                            {member.linkedin && member.linkedin !== '#' && <a href={member.linkedin} target="_blank" rel="noreferrer" className="social-btn linkedin">LinkedIn</a>}
+                            {member.github && member.github !== '#' && <a href={member.github} target="_blank" rel="noreferrer" className="social-btn github">GitHub</a>}
                         </div>
                         {user && (
                             <button

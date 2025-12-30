@@ -124,11 +124,11 @@ const ProfileSetup = () => {
                         <input type="text" name="qualification" id="qualification" required placeholder="e.g. B.Tech in CSE" value={formData.qualification} onChange={handleChange} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="linkedin">LinkedIn URL</label>
+                        <label htmlFor="linkedin">LinkedIn URL (Optional)</label>
                         <input type="url" name="linkedin" id="linkedin" placeholder="https://linkedin.com/in/..." value={formData.linkedin} onChange={handleChange} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="github">GitHub URL</label>
+                        <label htmlFor="github">GitHub URL (Optional)</label>
                         <input type="url" name="github" id="github" placeholder="https://github.com/..." value={formData.github} onChange={handleChange} />
                     </div>
 
